@@ -41,6 +41,7 @@ public class MainActivity extends ActionBarActivity implements OnResponseListene
 	private Oauth2AccessToken mAccessToken;
 	
 	private String method;
+	private String sharedName;
 	
 	private String uid;
 	
@@ -50,8 +51,11 @@ public class MainActivity extends ActionBarActivity implements OnResponseListene
 		case R.id.login:
 			login();
 			break;
-		case R.id.bt1:
+		case R.id.friends:
 			renMai();
+			break;
+		case R.id.commonFriends:
+			commonFriends();
 			break;
 		default:
 			break;
@@ -98,6 +102,27 @@ public class MainActivity extends ActionBarActivity implements OnResponseListene
 		excute();
 		
 		method = Constants.METHOD_FRIENDS;
+		sharedName = Constants.SHARED_WEIBO;
+	}
+	
+	private void commonFriends(){
+		
+		login();
+		init();
+		
+		SharedPreferences shared = getSharedPreferences("weibo" , Context.MODE_PRIVATE);
+		String id = shared.getString("uid1", "");
+		
+		httpRequest.setUri(Constants.GET_COMMON_FRIENDS);
+		httpRequest.setOnResponseListener(this);
+		httpParam.setParameter("access_token" , getToken());
+		httpParam.setParameter("uid", uid);
+		httpParam.setParameter("suid", id);
+		httpRequest.setHttpParameters(httpParam);
+		excute();
+		
+		method = Constants.METHOD_FRIENDS;
+		sharedName = Constants.SHARED_COMMON;
 	}
 	
 	/**
@@ -208,11 +233,20 @@ public class MainActivity extends ActionBarActivity implements OnResponseListene
 		
 		try {
 			JSONArray jsonArray = json.getJSONArray("users");
+			SharedPreferences shared = getSharedPreferences(sharedName , Context.MODE_PRIVATE);
+			shared.edit().putInt("total" , jsonArray.length()).commit();
 			for(int i = 0;i<jsonArray.length();i++){
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				String id = jsonObject.getString("id");
 				String name = jsonObject.getString("name");
+	//			String location = jsonObject.getString("location");
+	//			String description = jsonObject.getString("description");
+	//			String statuses_count = "" + jsonObject.getString("statuses_count");
+	//			String followers_count = "" + jsonObject.getInt("followers_count");
+	//			String friends_count = "" + jsonObject.getInt("friends_count");
 				Log.i("---friends---", "id: " + id + "  nickName: " + name);
+				
+				shared.edit().putString("uid" + i, id).commit();
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

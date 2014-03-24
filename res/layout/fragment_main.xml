@@ -20,8 +20,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/login"
         android:layout_marginTop="15sp"
-        android:id="@+id/bt1"
-        android:text="@string/login"
+        android:id="@+id/friends"
+        android:text="@string/friends"
         android:onClick="btClick" />
+    
+    <Button 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/friends"
+        android:id="@+id/commonFriends"
+        android:text="@string/commonFriends"
+        android:layout_marginTop="15sp"
+        android:onClick="btClick"/>
 
 </RelativeLayout>
