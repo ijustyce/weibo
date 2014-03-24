@@ -9,4 +9,6 @@
     <string name="login">Login</string>
     <string name="friends">Friends</string>
     <string name="commonFriends">Common Friends</string>
+    <string name="weibo">lastest weibo</string>
+    
 </resources>

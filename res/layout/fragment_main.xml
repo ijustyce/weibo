@@ -32,5 +32,14 @@
         android:text="@string/commonFriends"
         android:layout_marginTop="15sp"
         android:onClick="btClick"/>
+    
+    <Button 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/commonFriends"
+        android:id="@+id/weibo"
+        android:text="@string/weibo"
+        android:layout_marginTop="15sp"
+        android:onClick="btClick"/>
 
 </RelativeLayout>

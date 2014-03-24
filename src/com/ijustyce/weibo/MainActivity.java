@@ -57,6 +57,9 @@ public class MainActivity extends ActionBarActivity implements OnResponseListene
 		case R.id.commonFriends:
 			commonFriends();
 			break;
+		case R.id.weibo:
+			lastestWeibo();
+			break;
 		default:
 			break;
 		}
@@ -123,6 +126,23 @@ public class MainActivity extends ActionBarActivity implements OnResponseListene
 		
 		method = Constants.METHOD_FRIENDS;
 		sharedName = Constants.SHARED_COMMON;
+	}
+	
+	private void lastestWeibo(){
+		
+		login();
+		init();
+		
+		httpRequest.setUri(Constants.GET_LASTEST);
+		httpRequest.setOnResponseListener(this);
+		httpParam.setParameter("access_token" , getToken());
+		httpParam.setIntParameter("count", 15);    //number of weibo , default is 20
+		httpParam.setIntParameter("page ", 1);     //返回结果的页码
+		httpRequest.setHttpParameters(httpParam);
+		excute();
+		
+		method = Constants.METHOD_LASTEST;
+		sharedName = Constants.METHOD_LASTEST;
 	}
 	
 	/**
@@ -254,6 +274,27 @@ public class MainActivity extends ActionBarActivity implements OnResponseListene
 		}
 	}
 	
+	private void doWeibo(JSONObject json){
+		
+		try {
+			JSONArray jsonArray = json.getJSONArray("statuses");
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				String text = jsonObject.getString("text");
+				String created_at = jsonObject.getString("created_at");
+				JSONObject user = jsonObject.getJSONObject("user");
+				String id = user.getString("id");
+				String name = user.getString("name");
+				
+				Log.i("---weibo---", "userId: " + id + " name: " + name + 
+						" text: " + text + " created_at: " + created_at);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	protected void onDestroy() {
 		
@@ -346,6 +387,11 @@ public class MainActivity extends ActionBarActivity implements OnResponseListene
 			else if(method.equals(Constants.METHOD_FRIENDS)){
 				doFriends(response.parseAsJSON());
 				return ;
+			}
+			
+			else if (method.equals(Constants.METHOD_LASTEST)) {
+				doWeibo(response.parseAsJSON());
+				return;
 			}
 		}
 		
