@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">weibo</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">取消授权</string>
+    
+    <!-- 主界面 -->
+    <string name="login">Login</string>
+
+</resources>
